@@ -7,18 +7,10 @@ export class caculateController {
     constructor (private readonly caculate: caculateService) {}
 
     @Post ('evaluate')
-    async evaluate(@Body() dto: caculateDto) {
+     evaluate(@Body() dto: caculateDto) {
         //check input
-        if (!Number.isInteger(dto.a) || dto.a <= 0 ||
-        !Number.isInteger(dto.b) || dto.b <= 0 ||
-        !Number.isInteger(dto.x) || dto.x <= 0) {
-        throw new HttpException('a and b be positive integers', HttpStatus.BAD_REQUEST);
-        }
-
-        if (dto.a === dto.b) {
-        throw new HttpException('a and b must be different', HttpStatus.BAD_REQUEST);
-        }
-
+        this.validateInput(dto);
+        
         try {
             const result = this.caculate.evaluate(dto.a, dto.b, dto.x);
             return{
@@ -33,6 +25,17 @@ export class caculateController {
                 status: 'ERROR',
                 message: error
               }, HttpStatus.BAD_REQUEST);
+            }
+          }
+    private validateInput(dto: caculateDto) {
+            if (!Number.isInteger(dto.a) || dto.a <= 0 ||
+                !Number.isInteger(dto.b) || dto.b <= 0 ||
+                !Number.isInteger(dto.x) || dto.x <= 0) {
+              throw new HttpException('All inputs must be positive integers', HttpStatus.BAD_REQUEST);
+            }
+        
+            if (dto.a === dto.b) {
+              throw new HttpException('First two integers must be different', HttpStatus.BAD_REQUEST);
             }
           }
 }
