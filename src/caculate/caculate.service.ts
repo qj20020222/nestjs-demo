@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 
 @Injectable()
 export class caculateService {
@@ -10,13 +10,15 @@ export class caculateService {
 
         //seclect a number in validdivisors randomly
         const selected = validDivisors[Math.floor(Math.random() * validDivisors.length)];
-
+        if (validDivisors.length === 0) {
+            throw new BadRequestException('No valid divisors found');
+        }
         // generate a fibonacci sequence where the last number is less than x
         let [p, q] = [0, 1];
         const result: number[] = [p];
         while (q < selected) {
             result.push(q);
-            [p, q] = [p, p+q];
+            [p, q] = [q, p+q];
         }
 
         return {

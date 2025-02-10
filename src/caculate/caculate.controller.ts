@@ -21,9 +21,10 @@ export class caculateController {
               }
             };
         } catch (error) {
+          console.error('Detailed error:', error);
             throw new HttpException({
                 status: 'ERROR',
-                message: error
+                message: error.message
               }, HttpStatus.BAD_REQUEST);
             }
           }
